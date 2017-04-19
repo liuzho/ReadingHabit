@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ReadingHabit</string>
+    <string name="app_name">每日阅读</string>
+    <string name="one">ONE</string>
 </resources>

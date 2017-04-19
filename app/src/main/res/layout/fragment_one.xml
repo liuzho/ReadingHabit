@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:foregroundGravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/one"
+            android:textColor="#AAAAAA"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            tools:background="#eee"
+            tools:layout_height="200dp" />
+
+
+        <TextView
+            android:id="@+id/tv_picInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#AAAAAA"
+            android:textSize="12sp"
+            tools:text="摄影 | JerryZ" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:lineSpacingExtra="5dp"
+            android:textSize="16sp"
+            tools:text="这城市拥挤着、怒目而视着数百万人，如果失去身边的几人，便仿佛来到一片荒原上。" />
+
+        <TextView
+            android:id="@+id/tv_textInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="#aaa"
+            android:textSize="12sp"
+            android:layout_marginBottom="25dp"
+            tools:text="贾行家《尘土》" />
+    </LinearLayout>
+</ScrollView>
