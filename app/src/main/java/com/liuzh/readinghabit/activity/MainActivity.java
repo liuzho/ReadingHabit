@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.liuzh.readinghabit.R;
+import com.liuzh.readinghabit.fragment.BaseFragment;
 import com.liuzh.readinghabit.fragment.OneFragment;
 import com.liuzh.readinghabit.fragment.ReadFragment;
 import com.liuzh.readinghabit.popup.HomeMenuPop;
@@ -35,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mContext = this;
-        mFragmentList = new ArrayList<>();
-        mFragmentList.add(new OneFragment());
-        mFragmentList.add(new ReadFragment());
+
+        initFragment();
+
         mVpMain = (ViewPager) findViewById(R.id.vp_main);
         mVpMain.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mPagePos = position;
-                if (mMenuPop!=null){
+                if (mMenuPop != null) {
                     mMenuPop.setFragment(mFragmentList.get(position));
                 }
             }
@@ -80,10 +82,36 @@ public class MainActivity extends AppCompatActivity {
                     mMenuPop.setOutsideTouchable(true);
                 }
                 mMenuPop.setFragment(mFragmentList.get(mPagePos))
-                        .showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-
+                        .showAtLocation(getWindow().getDecorView().findViewById(
+                                android.R.id.content), Gravity.BOTTOM, 0, 0);
             }
         });
+    }
+
+    private void initFragment() {
+        mFragmentList = new ArrayList<>();
+
+        final OneFragment oneFragment = new OneFragment();
+        oneFragment.setOnFetchedListener(new BaseFragment.OnFetchedListener() {
+            @Override
+            public void onFetched() {
+                if (mMenuPop != null) {
+                    mMenuPop.initBtnVisibility(oneFragment);
+                }
+            }
+        });
+        mFragmentList.add(oneFragment);
+
+        final ReadFragment readFragment = new ReadFragment();
+        readFragment.setOnFetchedListener(new BaseFragment.OnFetchedListener() {
+            @Override
+            public void onFetched() {
+                if (mMenuPop != null) {
+                    mMenuPop.initBtnVisibility(readFragment);
+                }
+            }
+        });
+        mFragmentList.add(readFragment);
 
     }
 

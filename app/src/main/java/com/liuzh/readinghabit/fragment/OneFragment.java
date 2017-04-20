@@ -32,23 +32,27 @@ public class OneFragment extends BaseFragment {
 
     private List<OneDay> mDataList = new ArrayList<>();
     private int mCurrentPos = -1;
-    private String mCurrentDate;
 
     @Override
     protected void fetchData() {
-        mCurrentDate = DateUtil.getOneYMD();
-        fetchOne(mCurrentDate);
+        fetchOne(DateUtil.getOneYMD());
     }
 
     private void fetchOne(String date) {
         RetrofitUtil.getOneCall(date).enqueue(new Callback<One>() {
             @Override
             public void onResponse(Call<One> call, Response<One> response) {
-                mDataList.addAll(response.body().data);
+//                mDataList.addAll(0, addDate(response.body().data));
+
                 if (mCurrentPos == -1) {
                     mCurrentPos = 0;
                 }
+                mDataList = response.body().data;
                 setDate(mDataList.get(mCurrentPos));
+
+                if (mFetchedListener != null) {
+                    mFetchedListener.onFetched();
+                }
             }
 
             @Override
@@ -56,6 +60,18 @@ public class OneFragment extends BaseFragment {
                 onFetchFailure(t, "获取ONE失败");
             }
         });
+    }
+
+    private List<OneDay> addDate(List<OneDay> data) {
+        for (int i = 0; i < data.size(); i++) {
+            OneDay oneDay = data.get(i);
+            oneDay.curr = oneDay.maketime.split(" ")[0];
+            if (i < data.size() - 1) {
+                oneDay.prev = data.get(i + 1).maketime.split(" ")[0];
+            }
+
+        }
+        return data;
     }
 
     private void setDate(OneDay date) {
@@ -108,5 +124,10 @@ public class OneFragment extends BaseFragment {
     public void curr() {
         mCurrentPos = 0;
         setDate(mDataList.get(mCurrentPos));
+    }
+
+    @Override
+    public String getCurrDate() {
+        return mDataList.get(mCurrentPos).curr;
     }
 }

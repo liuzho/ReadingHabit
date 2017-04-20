@@ -11,7 +11,9 @@ public class OneDay {
     public String image_authors;
     public String text_authors;
 
+    public String maketime;
+
     public String prev;
-    public String curr;
+    public String curr = "";
     public String next;
 }

@@ -41,6 +41,9 @@ public class ReadFragment extends BaseFragment {
             public void onResponse(Call<Read> call, Response<Read> response) {
                 mData = response.body().data;
                 setData();
+                if (mFetchedListener != null) {
+                    mFetchedListener.onFetched();
+                }
             }
 
             @Override
@@ -83,4 +86,10 @@ public class ReadFragment extends BaseFragment {
     public void curr() {
         fetchRead(DateUtil.getReadYMD());
     }
+
+    @Override
+    public String getCurrDate() {
+        return mData.date.curr;
+    }
+
 }

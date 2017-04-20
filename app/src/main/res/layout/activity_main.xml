@@ -8,11 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/bt_showMenu"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:text="show menu" />
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg"
+        android:clickable="true"
+        android:src="@drawable/menu" />
 </RelativeLayout>

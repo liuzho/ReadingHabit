@@ -17,6 +17,8 @@ public abstract class BaseFragment extends Fragment {
 
     private View mRootView;
 
+    protected OnFetchedListener mFetchedListener;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,18 @@ public abstract class BaseFragment extends Fragment {
      */
     public void curr(){
 
+    }
+
+    public String getCurrDate(){
+        return "";
+    }
+
+    public interface OnFetchedListener{
+        void onFetched();
+    }
+
+    public void setOnFetchedListener(OnFetchedListener listener){
+        this.mFetchedListener = listener;
     }
 }
 
