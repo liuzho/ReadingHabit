@@ -35,16 +35,25 @@ public class DateUtil {
         return sdf.format(new Date());
     }
 
-    public static String getMouth(){
+    public static String getMouth() {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
         return sdf.format(new Date());
     }
 
-    public static String getYear(){
+    public static String getYear() {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         return sdf.format(new Date());
+    }
+
+    /**
+     * 是不是闰年
+     * @param year 年份
+     * @return true：是；false：否
+     */
+    public static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
 }

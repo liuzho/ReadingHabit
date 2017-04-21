@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.liuzh.readinghabit.application.App;
 
 
 /**
@@ -17,7 +18,7 @@ public abstract class BaseFragment extends Fragment {
 
     private View mRootView;
 
-    protected OnFetchedListener mFetchedListener;
+    protected OnFetchListener mFetchListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void onFetchFailure(Throwable t, String msg) {
-        Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+        App.showToast(t.getMessage());
         Snackbar.make(getActivity().getWindow().getDecorView().findViewById(
                 android.R.id.content), msg, 2000)
                 .setAction("重试", new View.OnClickListener() {
@@ -61,32 +62,30 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 上一天的内容
      */
-    public void pre() {
-    }
+    public abstract void pre();
 
     /**
      * 下一天的内容
      */
-    public void next() {
-    }
+    public abstract void next();
 
     /**
      * 回到今天的内容
      */
-    public void curr(){
+    public abstract void curr();
 
+    public Object getCurrBean() {
+        return null;
     }
 
-    public String getCurrDate(){
-        return "";
-    }
+    public interface OnFetchListener {
+        void onBeginFetch();
 
-    public interface OnFetchedListener{
         void onFetched();
     }
 
-    public void setOnFetchedListener(OnFetchedListener listener){
-        this.mFetchedListener = listener;
+    public void setOnFetchListener(OnFetchListener listener) {
+        this.mFetchListener = (listener);
     }
 }
 

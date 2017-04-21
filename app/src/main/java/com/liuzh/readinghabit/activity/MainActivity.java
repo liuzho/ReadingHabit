@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.liuzh.readinghabit.R;
 import com.liuzh.readinghabit.fragment.BaseFragment;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private HomeMenuPop mMenuPop;
 
+    private ProgressBar mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,20 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
 
+        mMenuPop = new HomeMenuPop(mContext);
+        mMenuPop.setOutsideTouchable(true);
+
         initFragment();
+
+        initView();
+
+
+    }
+
+    private void initView() {
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         mVpMain = (ViewPager) findViewById(R.id.vp_main);
         mVpMain.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -77,10 +94,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_showMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMenuPop == null) {
-                    mMenuPop = new HomeMenuPop(mContext);
-                    mMenuPop.setOutsideTouchable(true);
-                }
                 mMenuPop.setFragment(mFragmentList.get(mPagePos))
                         .showAtLocation(getWindow().getDecorView().findViewById(
                                 android.R.id.content), Gravity.BOTTOM, 0, 0);
@@ -88,32 +101,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void initFragment() {
         mFragmentList = new ArrayList<>();
 
-        final OneFragment oneFragment = new OneFragment();
-        oneFragment.setOnFetchedListener(new BaseFragment.OnFetchedListener() {
+        OneFragment oneFragment = new OneFragment();
+        oneFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
+            @Override
+            public void onBeginFetch() {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onFetched() {
-                if (mMenuPop != null) {
-                    mMenuPop.initBtnVisibility(oneFragment);
-                }
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
         mFragmentList.add(oneFragment);
 
-        final ReadFragment readFragment = new ReadFragment();
-        readFragment.setOnFetchedListener(new BaseFragment.OnFetchedListener() {
+        ReadFragment readFragment = new ReadFragment();
+        readFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
+            @Override
+            public void onBeginFetch() {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onFetched() {
-                if (mMenuPop != null) {
-                    mMenuPop.initBtnVisibility(readFragment);
-                }
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+        readFragment.setVerfyLike(new ReadFragment.VerifyLike() {
+            @Override
+            public void verifyLike() {
+                
             }
         });
         mFragmentList.add(readFragment);
-
     }
-
-
 }

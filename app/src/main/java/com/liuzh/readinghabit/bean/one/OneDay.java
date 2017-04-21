@@ -14,6 +14,6 @@ public class OneDay {
     public String maketime;
 
     public String prev;
-    public String curr = "";
+    public String curr;
     public String next;
 }
