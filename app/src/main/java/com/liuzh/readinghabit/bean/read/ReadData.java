@@ -9,5 +9,5 @@ public class ReadData {
     public String title;
     public String content;
 
-    public Date date;
+    public Date date = new Date();
 }

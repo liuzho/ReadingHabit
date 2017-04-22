@@ -42,6 +42,8 @@ public class OneFragment extends BaseFragment {
 
     private Call<One> mCall;
 
+    private boolean mIsSetOne = false;
+    private String mSetOneCurr = "";
 
     /**
      * 新获取的数据是否由按next请求得到
@@ -84,8 +86,17 @@ public class OneFragment extends BaseFragment {
                     // 否则定位到月末
                     mCurrentPos = 0;
                 }
-                // 设置界面数据
-                setDate(mDataList.get(mCurrentPos));
+                if (mIsSetOne) {
+                    for (int i = 0; i < mDataList.size(); i++) {
+                        if (mDataList.get(i).curr.equals(mSetOneCurr)) {
+                            mCurrentPos = i;
+                            break;
+                        }
+                    }
+                } else {
+                    // 设置界面数据
+                    setDate(mDataList.get(mCurrentPos));
+                }
                 // 调用获取结束监听
                 if (mFetchListener != null) {
                     mFetchListener.onFetched();
@@ -131,6 +142,7 @@ public class OneFragment extends BaseFragment {
 
     /**
      * 如果个位数，要在前面加个0
+     *
      * @param num 检验的数字
      * @return 加完0后的数字
      */
@@ -294,20 +306,28 @@ public class OneFragment extends BaseFragment {
      */
     @Override
     public void next() {
+        Log.i(TAG, "next: " + mDataList.get(mCurrentPos).next);
         if (mCurrentPos == -1) {
             return;
         }
+
+        // 检测是否当前为当天内容
+        String currDate = DateUtil.getOneYMD();
         OneDay oneDay = mDataList.get(mCurrentPos);
-        if (mCurrentPos == 0 && oneDay.next.split(SEPARATOR)[2].equals("1")) {
-            fetchOne(oneDay.next);
-            mIsNextNewList = true;
-            Log.i(TAG, "next: new next list");
-            return;
-        } else if (mCurrentPos == 0 && !oneDay.next.split(SEPARATOR)[2].equals("1")) {
+        if (mDataList.get(mCurrentPos).curr.equals(currDate)) {
+            // 是当天内容
             App.showToast("no next");
-            return;
+        } else {
+            // 不是当天内容
+            if (oneDay.next.split(SEPARATOR)[2].equals("01")) {
+                // 如果下一天字段是1号，表示要跳转到下一个月，即请求新数据
+                fetchOne(oneDay.next);
+                mIsNextNewList = true;
+            } else {
+                // 如果下一天字段不是1号，则表示直接在当前数据链中切换到下一条
+                setDate(mDataList.get(--mCurrentPos));
+            }
         }
-        setDate(mDataList.get(--mCurrentPos));
     }
 
     /**
@@ -334,7 +354,19 @@ public class OneFragment extends BaseFragment {
 
     @Override
     public OneDay getCurrBean() {
+        if (mCurrentPos == -1) {
+            return null;
+        }
         return mDataList.get(mCurrentPos);
+    }
+
+    @Override
+    public void setLikeBean(Object o) {
+        OneDay one = (OneDay) o;
+        setDate(one);
+        fetchOne(one.curr);
+        mSetOneCurr = one.curr;
+        mIsSetOne = true;
     }
 
 

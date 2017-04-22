@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.liuzh.readinghabit.application.App;
 
+import java.util.List;
+
 
 /**
  * Created by 刘晓彬 on 2017/4/18.
@@ -111,8 +113,14 @@ public abstract class BaseFragment extends Fragment {
         mIsLiked = isLiked;
     }
 
-    public boolean isLiked(){
+    public boolean isLiked() {
         return mIsLiked;
     }
+
+
+    public void setLikeBean(Object o) {
+    }
+
+
 }
 

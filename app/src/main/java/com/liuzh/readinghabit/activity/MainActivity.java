@@ -7,12 +7,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.liuzh.readinghabit.R;
+import com.liuzh.readinghabit.application.App;
+import com.liuzh.readinghabit.bean.one.OneDay;
+import com.liuzh.readinghabit.bean.read.ReadData;
+import com.liuzh.readinghabit.dialog.CollectDialog;
 import com.liuzh.readinghabit.fragment.BaseFragment;
 import com.liuzh.readinghabit.fragment.OneFragment;
 import com.liuzh.readinghabit.fragment.ReadFragment;
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
 
+    private ImageView mIvShowMenu;
+
+    private CollectDialog mLikesDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +52,34 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
 
-        mMenuPop = new HomeMenuPop(mContext);
+        initDialog();
+
+        mMenuPop = new HomeMenuPop(mContext, mLikesDialog);
         mMenuPop.setOutsideTouchable(true);
 
         initFragment();
 
         initView();
+    }
 
-
+    private void initDialog() {
+        mLikesDialog = new CollectDialog(mContext);
+        mLikesDialog.setOnReadClickListener(new CollectDialog.OnReadClickListener() {
+            @Override
+            public void onReadClick(ReadData read) {
+                mLikesDialog.dismiss();
+                mVpMain.setCurrentItem(1, true);
+                mFragmentList.get(1).setLikeBean(read);
+            }
+        });
+        mLikesDialog.setOnOneClickListener(new CollectDialog.OnOneClickListener() {
+            @Override
+            public void onOneCLick(OneDay one) {
+                mLikesDialog.dismiss();
+                mVpMain.setCurrentItem(0, true);
+                mFragmentList.get(0).setLikeBean(one);
+            }
+        });
     }
 
     private void initView() {
@@ -81,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mPagePos = position;
-                mMenuPop.setFragment(mFragmentList.get(position));
+                mMenuPop.setCurrContent(mFragmentList.get(position));
                 if (position == 0) {
                     mMenuPop.verifyOne(mFragmentList.get(0));
                 } else {
@@ -95,10 +123,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.bt_showMenu).setOnClickListener(new View.OnClickListener() {
+        mIvShowMenu = (ImageView) findViewById(R.id.bt_showMenu);
+
+        mIvShowMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMenuPop.setFragment(mFragmentList.get(mPagePos))
+                mMenuPop.setCurrContent(mFragmentList.get(mPagePos))
                         .showAtLocation(getWindow().getDecorView().findViewById(
                                 android.R.id.content), Gravity.BOTTOM, 0, 0);
             }

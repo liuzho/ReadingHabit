@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="340dp"
+    android:layout_height="500dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:shadowRadius="5"
+                    android:text="ONE"
+                    android:textColor="#FFF"
+                    android:textSize="18sp" />
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    style="@style/AppTheme"
+                    android:visibility="invisible"
+                    android:layout_centerVertical="true"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="#EEE" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:shadowRadius="5"
+                android:text="READ"
+                android:textColor="#FFF"
+                android:textSize="18sp" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_read"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+</LinearLayout>
