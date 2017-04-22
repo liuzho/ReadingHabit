@@ -34,7 +34,7 @@ public class ReadFragment extends BaseFragment {
 
     private Call<Read> mCall;
 
-    private VerifyLike mVerifyLike;
+    private boolean mIsFirstEnter = true;
 
     @Override
     protected int getRootViewId() {
@@ -49,7 +49,6 @@ public class ReadFragment extends BaseFragment {
     private void fetchRead(String date) {
         if (mFetchListener != null) {
             mFetchListener.onBeginFetch();
-            mFetchListener.onFetching();
         }
         mCall = RetrofitUtil.getReadCall(date);
         mCall.enqueue(new Callback<Read>() {
@@ -79,7 +78,14 @@ public class ReadFragment extends BaseFragment {
         String content = mData.content.replace("<p>", "　　");
         content = content.replace("</p>", "\n\n");
         mTvContent.setText(content);
+        // 将界面滑动到顶部
+        mScrollView.scrollTo(0,0);
         mScrollView.smoothScrollTo(0, 0);
+        // 如果是刚刚启动应用进来，则不进行收藏检验，因为One也在检验就会导致收藏按钮图片异常
+        if (mIsFirstEnter) {
+            mIsFirstEnter = false;
+            return;
+        }
         verifyLike();
     }
 
@@ -124,17 +130,5 @@ public class ReadFragment extends BaseFragment {
         return mData;
     }
 
-    public void verifyLike() {
-        if (mVerifyLike != null) {
-            mVerifyLike.verifyLike();
-        }
-    }
 
-    public interface VerifyLike {
-        void verifyLike();
-    }
-
-    public void setVerfyLike(VerifyLike verifyLike) {
-        mVerifyLike = verifyLike;
-    }
 }

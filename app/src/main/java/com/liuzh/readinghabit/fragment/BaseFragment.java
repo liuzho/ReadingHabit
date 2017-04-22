@@ -20,6 +20,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected OnFetchListener mFetchListener;
 
+    protected VerifyLike mVerifyLike;
+
+    protected boolean mIsLiked = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +90,29 @@ public abstract class BaseFragment extends Fragment {
 
     public void setOnFetchListener(OnFetchListener listener) {
         this.mFetchListener = (listener);
+    }
+
+    protected void verifyLike() {
+        if (mVerifyLike != null) {
+            mVerifyLike.verifyLike();
+        }
+    }
+
+    public interface VerifyLike {
+        void verifyLike();
+    }
+
+    public void setVerifyLike(VerifyLike verifyLike) {
+        mVerifyLike = verifyLike;
+    }
+
+
+    public void setIsLiked(boolean isLiked) {
+        mIsLiked = isLiked;
+    }
+
+    public boolean isLiked(){
+        return mIsLiked;
     }
 }
 

@@ -42,7 +42,6 @@ public class OneFragment extends BaseFragment {
 
     private Call<One> mCall;
 
-    private boolean mIsLike = false;
 
     /**
      * 新获取的数据是否由按next请求得到
@@ -69,7 +68,6 @@ public class OneFragment extends BaseFragment {
         // 调用获取监听
         if (mFetchListener != null) {
             mFetchListener.onBeginFetch();
-            mFetchListener.onFetching();
         }
         mCall = RetrofitUtil.getOneCall(date);
         mCall.enqueue(new Callback<One>() {
@@ -111,7 +109,7 @@ public class OneFragment extends BaseFragment {
      * @param data 第一次获取到的数据
      */
     private void feedDate(List<OneDay> data) {
-        // maketime的格式：2017-4-20 22:26:23 故以此分割得到日期的数组
+        // maketime的格式：2017-04-20 22:26:23 故以此分割得到日期的数组
         String[] dateStrArr = data.get(0).maketime.split(" ")[0].split(SEPARATOR);
         int year = Integer.valueOf(dateStrArr[0]);
         int mouth = Integer.valueOf(dateStrArr[1]);
@@ -120,7 +118,7 @@ public class OneFragment extends BaseFragment {
         for (int i = 0; i < data.size(); i++) {
             OneDay oneDay = data.get(i);
             // feedCurr
-            oneDay.curr = year + SEPARATOR + mouth + SEPARATOR + day;
+            oneDay.curr = year + SEPARATOR + add0(mouth) + SEPARATOR + add0(day);
             // feedPrev
             feedPrev(oneDay, year, mouth, day);
             // feedNext
@@ -129,7 +127,19 @@ public class OneFragment extends BaseFragment {
             day--;
 //            Log.i(TAG, oneDay.prev + "<==>" + oneDay.curr + "<==>" + oneDay.next);
         }
+    }
 
+    /**
+     * 如果个位数，要在前面加个0
+     * @param num 检验的数字
+     * @return 加完0后的数字
+     */
+    private String add0(int num) {
+        if (num < 10) {
+            return "0" + num;
+        } else {
+            return "" + num;
+        }
     }
 
     /**
@@ -186,7 +196,7 @@ public class OneFragment extends BaseFragment {
         } else {
             day = day + 1;
         }
-        oneDay.next = year + SEPARATOR + mouth + SEPARATOR + day;
+        oneDay.next = year + SEPARATOR + add0(mouth) + SEPARATOR + add0(day);
     }
 
     /**
@@ -215,7 +225,7 @@ public class OneFragment extends BaseFragment {
             // 不是1号
             day = day - 1;
         }
-        oneDay.prev = year + SEPARATOR + mouth + SEPARATOR + day;
+        oneDay.prev = year + SEPARATOR + add0(mouth) + SEPARATOR + add0(day);
     }
 
     /**
@@ -239,7 +249,9 @@ public class OneFragment extends BaseFragment {
         mTvText.setText(date.hp_content);
         mTvTextInfo.setText(date.text_authors);
         // 将界面滑动到顶部
+        mScrollView.scrollTo(0, 0);
         mScrollView.smoothScrollTo(0, 0);
+        verifyLike();
     }
 
     @Override
@@ -304,14 +316,18 @@ public class OneFragment extends BaseFragment {
     @Override
     public void curr() {
         String currDate = DateUtil.getOneYMD();
+
+        Log.i(TAG, "curr: " + currDate + "===>" + mDataList.get(mCurrentPos).curr);
+
+        if (mDataList.get(mCurrentPos).curr.equals(currDate)) {
+            App.showToast("is today");
+            return;
+        }
         if (mDataList.get(0).curr.equals(currDate)) {
-            if (mCurrentPos == 0) {
-                App.showToast("is today");
-                return;
-            }
             mCurrentPos = 0;
             setDate(mDataList.get(mCurrentPos));
         } else {
+            Log.i(TAG, "curr: fetch");
             fetchOne(currDate);
         }
     }
@@ -320,4 +336,6 @@ public class OneFragment extends BaseFragment {
     public OneDay getCurrBean() {
         return mDataList.get(mCurrentPos);
     }
+
+
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mVpMain;
 
-    private List<Fragment> mFragmentList;
+    private List<BaseFragment> mFragmentList;
 
     private int mPagePos = 0;
 
@@ -80,8 +81,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mPagePos = position;
-                if (mMenuPop != null) {
-                    mMenuPop.setFragment(mFragmentList.get(position));
+                mMenuPop.setFragment(mFragmentList.get(position));
+                if (position == 0) {
+                    mMenuPop.verifyOne(mFragmentList.get(0));
+                } else {
+                    mMenuPop.verifyRead(mFragmentList.get(1));
                 }
             }
 
@@ -105,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         mFragmentList = new ArrayList<>();
 
-        OneFragment oneFragment = new OneFragment();
+        final OneFragment oneFragment = new OneFragment();
+
         oneFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
             @Override
             public void onBeginFetch() {
@@ -117,9 +122,16 @@ public class MainActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
+
+        oneFragment.setVerifyLike(new BaseFragment.VerifyLike() {
+            @Override
+            public void verifyLike() {
+                mMenuPop.verifyOne(oneFragment);
+            }
+        });
         mFragmentList.add(oneFragment);
 
-        ReadFragment readFragment = new ReadFragment();
+        final ReadFragment readFragment = new ReadFragment();
         readFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
             @Override
             public void onBeginFetch() {
@@ -131,12 +143,22 @@ public class MainActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
-        readFragment.setVerfyLike(new ReadFragment.VerifyLike() {
+        readFragment.setVerifyLike(new ReadFragment.VerifyLike() {
             @Override
             public void verifyLike() {
-                
+                mMenuPop.verifyRead(readFragment);
             }
         });
         mFragmentList.add(readFragment);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mMenuPop.isShowing()) {
+            mMenuPop.dismiss();
+        } else {
+            finish();
+        }
     }
 }

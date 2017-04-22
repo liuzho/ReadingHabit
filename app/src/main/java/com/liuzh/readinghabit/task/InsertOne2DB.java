@@ -3,12 +3,11 @@ package com.liuzh.readinghabit.task;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.liuzh.readinghabit.R;
 import com.liuzh.readinghabit.application.App;
-import com.liuzh.readinghabit.bean.read.ReadData;
+import com.liuzh.readinghabit.bean.one.OneDay;
 import com.liuzh.readinghabit.db.LikeDBHelper;
 import com.liuzh.readinghabit.fragment.BaseFragment;
 
@@ -16,38 +15,32 @@ import com.liuzh.readinghabit.fragment.BaseFragment;
  * Created by 刘晓彬 on 2017/4/21.
  */
 
-public class InsertRead2DB extends AsyncTask<ReadData, Void, Void> {
+public class InsertOne2DB extends AsyncTask<OneDay, Void, Void> {
 
-    private static final String TAG = "InsertRead2DB";
     private ImageView mBtLike;
     private BaseFragment mFragment;
 
-    public InsertRead2DB(BaseFragment fragment,ImageView btnLike) {
+    public InsertOne2DB(BaseFragment fragment,ImageView btLike) {
         mFragment = fragment;
-        mBtLike = btnLike;
+        mBtLike = btLike;
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected Void doInBackground(ReadData... params) {
-        ReadData readData = params[0];
+    protected Void doInBackground(OneDay... params) {
+        OneDay oneDay = params[0];
         LikeDBHelper dbHelper = new LikeDBHelper(App.getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction();
         ContentValues values = new ContentValues();
-        values.put(LikeDBHelper.AUTHOR, readData.author);
-        values.put(LikeDBHelper.TITLE, readData.title);
-        values.put(LikeDBHelper.CONTENT, readData.content);
-        values.put(LikeDBHelper.PREV, readData.date.prev);
-        values.put(LikeDBHelper.CURR, readData.date.curr);
-        values.put(LikeDBHelper.NEXT, readData.date.next);
-        db.insert(LikeDBHelper.READ_TABLE_NAME, null, values);
-        db.setTransactionSuccessful();
-        db.endTransaction();
+        values.put(LikeDBHelper.HP_AUTHOR, oneDay.hp_author);
+        values.put(LikeDBHelper.HP_CONTENT, oneDay.hp_content);
+        values.put(LikeDBHelper.HP_IMG_URL, oneDay.hp_img_url);
+        values.put(LikeDBHelper.IMAGE_AUTHORS, oneDay.image_authors);
+        values.put(LikeDBHelper.TEXT_AUTHORS, oneDay.text_authors);
+        values.put(LikeDBHelper.MAKE_TIME, oneDay.maketime);
+        values.put(LikeDBHelper.PREV, oneDay.prev);
+        values.put(LikeDBHelper.CURR, oneDay.curr);
+        values.put(LikeDBHelper.NEXT, oneDay.next);
+        db.insert(LikeDBHelper.ONE_TABLE_NAME, null, values);
         db.close();
         return null;
     }
