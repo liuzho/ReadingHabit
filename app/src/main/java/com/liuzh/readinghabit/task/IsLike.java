@@ -41,6 +41,7 @@ public class IsLike extends AsyncTask<String, Void, Boolean> {
                 new String[]{LikeDBHelper.CURR},
                 LikeDBHelper.CURR + "=?",
                 new String[]{curr}, null, null, null);
+        Log.i(TAG, "doInBackground: "+curr);
         if (cursor.getCount() == 0) {
             cursor.close();
             Log.i(TAG, "doInBackground: nothing");

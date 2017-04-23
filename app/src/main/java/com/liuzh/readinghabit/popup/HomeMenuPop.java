@@ -24,8 +24,6 @@ import com.liuzh.readinghabit.task.IsLike;
 import com.liuzh.readinghabit.task.QueryLikes;
 import com.liuzh.readinghabit.util.DensityUtil;
 
-import java.util.ArrayList;
-
 /**
  * Created by 刘晓彬 on 2017/4/18.
  */
@@ -43,7 +41,7 @@ public class HomeMenuPop extends PopupWindow {
     private Context mContext;
     private CollectDialog mDialog;
 
-    public HomeMenuPop(Context context,CollectDialog dialog) {
+    public HomeMenuPop(Context context, CollectDialog dialog) {
         super(LayoutInflater.from(context).inflate(R.layout.popup_main_menu, null),
                 ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(70));
         this.setAnimationStyle(R.style.MenuPop);
@@ -198,6 +196,13 @@ public class HomeMenuPop extends PopupWindow {
             return;
         }
         new IsLike(fragment, mBtLike, LikeDBHelper.ONE_TABLE_NAME).execute(oneDay.curr);
+    }
+
+    public void btClickable(boolean clickable) {
+        mBtPre.setClickable(clickable);
+        mBtToday.setClickable(clickable);
+        mBtNext.setClickable(clickable);
+        mBtLike.setClickable(clickable);
     }
 
 }

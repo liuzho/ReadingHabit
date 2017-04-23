@@ -1,8 +1,10 @@
 package com.liuzh.readinghabit.util;
 
+import com.liuzh.readinghabit.bean.Update;
 import com.liuzh.readinghabit.bean.one.One;
 import com.liuzh.readinghabit.bean.read.Read;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -19,6 +21,8 @@ public class RetrofitUtil {
 
     private static final String BASE_URL_READ = "https://interface.meiriyiwen.com/";
 
+    private static final String BASE_URL_UPDATE = "https://microzz.cn/";
+
     /**
      * 获取Retrofit实例
      *
@@ -32,6 +36,7 @@ public class RetrofitUtil {
                 .build();
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
     interface OneService {
         @GET("hp/bymonth/{date}%2000:00:00?channel=wdj&version=4.0.2" +
                 "&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android")
@@ -42,7 +47,7 @@ public class RetrofitUtil {
         return getRetrofit(BASE_URL_ONE).create(OneService.class).getCall(date);
     }
 
-
+    //////////////////////////////////////////////////////////////////////////////
     interface ReadService {
         @GET("article/day?dev=1&date=20170216")
         Call<Read> getCall(@Query("date") String date);
@@ -52,4 +57,13 @@ public class RetrofitUtil {
         return getRetrofit(BASE_URL_READ).create(ReadService.class).getCall(date);
     }
 
+    /////////////////////////////////////////////////////////////////////////////
+    interface UpdateService {
+        @GET("update.json")
+        Call<Update> getCall();
+    }
+
+    public static Call<Update> getUpdateCall() {
+        return getRetrofit(BASE_URL_UPDATE).create(UpdateService.class).getCall();
+    }
 }

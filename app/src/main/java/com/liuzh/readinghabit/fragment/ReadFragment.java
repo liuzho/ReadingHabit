@@ -79,7 +79,7 @@ public class ReadFragment extends BaseFragment {
         content = content.replace("</p>", "\n\n");
         mTvContent.setText(content);
         // 将界面滑动到顶部
-        mScrollView.scrollTo(0,0);
+        mScrollView.scrollTo(0, 0);
         mScrollView.smoothScrollTo(0, 0);
         // 如果是刚刚启动应用进来，则不进行收藏检验，因为One也在检验就会导致收藏按钮图片异常
         if (mIsFirstEnter) {
@@ -130,5 +130,9 @@ public class ReadFragment extends BaseFragment {
         return mData;
     }
 
-
+    @Override
+    public void setLikeBean(Object o) {
+        mData = (ReadData) o;
+        setData();
+    }
 }

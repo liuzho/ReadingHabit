@@ -1,19 +1,24 @@
 package com.liuzh.readinghabit.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.liuzh.readinghabit.R;
-import com.liuzh.readinghabit.application.App;
+import com.liuzh.readinghabit.bean.Update;
 import com.liuzh.readinghabit.bean.one.OneDay;
 import com.liuzh.readinghabit.bean.read.ReadData;
 import com.liuzh.readinghabit.dialog.CollectDialog;
@@ -21,9 +26,15 @@ import com.liuzh.readinghabit.fragment.BaseFragment;
 import com.liuzh.readinghabit.fragment.OneFragment;
 import com.liuzh.readinghabit.fragment.ReadFragment;
 import com.liuzh.readinghabit.popup.HomeMenuPop;
+import com.liuzh.readinghabit.util.PackageUtil;
+import com.liuzh.readinghabit.util.RetrofitUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fetchUpdate();
+
         mContext = this;
 
         initDialog();
@@ -60,6 +73,54 @@ public class MainActivity extends AppCompatActivity {
         initFragment();
 
         initView();
+    }
+
+    private void fetchUpdate() {
+
+        RetrofitUtil.getUpdateCall().enqueue(new Callback<Update>() {
+            @Override
+            public void onResponse(Call<Update> call, Response<Update> response) {
+                int vCode = PackageUtil.getVersionCode(mContext);
+                showUpdateDialog(vCode, response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Update> call, Throwable t) {
+                Log.i(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void showUpdateDialog(int v, Update update) {
+        int sv = Integer.valueOf(update.versionCode);
+
+        if (sv > v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("新版本提示")
+                    .setMessage(update.info
+                            + "\n\n当前版本：" + PackageUtil.getVerionName(mContext)
+                            + "\n发布版本：" + update.versionName
+                            + "\n发布日期：" + update.publishDate)
+                    .setPositiveButton("愉快升级", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            Uri content_url = Uri.parse("https://liuzho.com/readinghabitapp/publish.apk");
+                            intent.setData(content_url);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("狠心放弃", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        }
     }
 
     private void initDialog() {
@@ -144,11 +205,15 @@ public class MainActivity extends AppCompatActivity {
         oneFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
             @Override
             public void onBeginFetch() {
+                Log.i(TAG, "OneFragment onBeginFetch: ");
+                mMenuPop.btClickable(false);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFetched() {
+                Log.i(TAG, "OneFragment onFetched: ");
+                mMenuPop.btClickable(true);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
@@ -165,11 +230,13 @@ public class MainActivity extends AppCompatActivity {
         readFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
             @Override
             public void onBeginFetch() {
+                mMenuPop.btClickable(false);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFetched() {
+                mMenuPop.btClickable(true);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         });

@@ -43,7 +43,6 @@ public class OneFragment extends BaseFragment {
     private Call<One> mCall;
 
     private boolean mIsSetOne = false;
-    private String mSetOneCurr = "";
 
     /**
      * 新获取的数据是否由按next请求得到
@@ -66,11 +65,24 @@ public class OneFragment extends BaseFragment {
      *
      * @param date 请求url中携带的日期
      */
-    private void fetchOne(String date) {
+    private void fetchOne(final String date) {
+        Log.i(TAG, "fetchOne: 1");
+        if (mIsSetOne && mDataList != null) {
+            Log.i(TAG, "fetchOne: 2");
+            for (int i = 0; i < mDataList.size(); i++) {
+                if (mDataList.get(i).curr.equals(date)) {
+                    Log.i(TAG, "fetchOne: curr:" + date);
+                    mCurrentPos = i;
+                    mIsSetOne = false;
+                    return;
+                }
+            }
+        }
         // 调用获取监听
         if (mFetchListener != null) {
             mFetchListener.onBeginFetch();
         }
+
         mCall = RetrofitUtil.getOneCall(date);
         mCall.enqueue(new Callback<One>() {
             @Override
@@ -87,13 +99,17 @@ public class OneFragment extends BaseFragment {
                     mCurrentPos = 0;
                 }
                 if (mIsSetOne) {
+                    Log.i(TAG, "onResponse: setone");
                     for (int i = 0; i < mDataList.size(); i++) {
-                        if (mDataList.get(i).curr.equals(mSetOneCurr)) {
+                        if (mDataList.get(i).curr.equals(date)) {
                             mCurrentPos = i;
+                            verifyLike();
                             break;
                         }
                     }
+                    mIsSetOne = false;
                 } else {
+                    Log.i(TAG, "onResponse:  not setone");
                     // 设置界面数据
                     setDate(mDataList.get(mCurrentPos));
                 }
@@ -307,6 +323,7 @@ public class OneFragment extends BaseFragment {
     @Override
     public void next() {
         Log.i(TAG, "next: " + mDataList.get(mCurrentPos).next);
+
         if (mCurrentPos == -1) {
             return;
         }
@@ -362,11 +379,11 @@ public class OneFragment extends BaseFragment {
 
     @Override
     public void setLikeBean(Object o) {
-        OneDay one = (OneDay) o;
-        setDate(one);
-        fetchOne(one.curr);
-        mSetOneCurr = one.curr;
         mIsSetOne = true;
+        OneDay one = (OneDay) o;
+        fetchOne(one.curr);
+        setDate(one);
+        Log.i(TAG, "setLikeBean: " + one.curr);
     }
 
 
