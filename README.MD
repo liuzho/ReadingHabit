@@ -5,16 +5,17 @@
 当然了，如果喜欢这个APP也可以安装在手机上，每天一阅读，满满文艺范
 
 - Github传送 => **[ReadingHabit](https://github.com/liuzho/ReadingHabit)**
-- 下载地址 => **[点我下载APK](https://liuzho.com/readinghabitapp/publish.apk) **
+- 下载地址 => **[点我下载APK](https://liuzho.com/readinghabitapp/publish.apk)**
 
 >我的腾讯云证书有问题，会提示危险链接，不用担心。后面我也会解决这个问题。
-如果实在不放心，可以前往GitHub下载我的release版本，或者克隆项目编译自己搞
+>
+>如果实在不放心，可以前往GitHub下载我的release版本，或者克隆项目编译自己搞
 
 话不多说，先来看看这个APP的预览
 
 ## 预览
 
-![预览](https://dn-mhke0kuv.qbox.me/5342c71a03f21336c081.gif)
+![预览](https://github.com/liuzho/ReadingHabit/raw/master/demo.gif)
 
 ## 简述
 
@@ -37,12 +38,12 @@
 2. 用到《每日一文》的API => [每日一文-API](https://github.com/jokermonn/-Api/blob/master/OneArticle.md)
 
 > - 感谢分享API的哥们儿
-- 若侵犯《ONE》/《每日一文》权益，本人将及时删除相关内容
+> - 若侵犯《ONE》/《每日一文》权益，本人将及时删除相关内容
 
 ## 结语
 
 >- 更多内容欢迎访问**[我的主页](https://liuzho.com)**或**[我的博客](https://liuzho.github.io)**
-- 喜欢这个APP或想学习这个APP，请不要忘了点一下文末的"♡"让他变成"❤"
-- 当然，也别忘了Star一下我的仓库 => **[ReadingHabit](https://github.com/liuzho/ReadingHabit)**
-- 下载地址 => **[点我下载APK](https://liuzho.com/readinghabitapp/publish.apk) **
-- 别看APP挺简单，写起来你才知道有多蛋疼，不说了，养蛋去了
+>- 喜欢这个APP或想学习这个APP，请不要忘了点一下文末的"♡"让他变成"❤"
+>- 当然，也别忘了Star一下我的仓库 => **[ReadingHabit](https://github.com/liuzho/ReadingHabit)**
+>- 下载地址 => **[点我下载APK](https://liuzho.com/readinghabitapp/publish.apk)**
+>- 别看APP挺简单，写起来你才知道有多蛋疼，不说了，养蛋去了
