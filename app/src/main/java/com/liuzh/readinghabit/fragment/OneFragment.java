@@ -274,7 +274,7 @@ public class OneFragment extends BaseFragment {
             picInfo = date.hp_author + " | " + date.image_authors;
         }
         mTvPicInfo.setText(picInfo);
-        mTvText.setText(date.hp_content);
+        mTvText.setText("\n" + date.hp_content + "\n");
         mTvTextInfo.setText(date.text_authors);
         // 将界面滑动到顶部
         mScrollView.scrollTo(0, 0);

@@ -23,6 +23,7 @@ import com.liuzh.readinghabit.task.InsertRead2DB;
 import com.liuzh.readinghabit.task.IsLike;
 import com.liuzh.readinghabit.task.QueryLikes;
 import com.liuzh.readinghabit.util.DensityUtil;
+import com.liuzh.readinghabit.util.PackageUtil;
 
 /**
  * Created by 刘晓彬 on 2017/4/18.
@@ -70,8 +71,8 @@ public class HomeMenuPop extends PopupWindow {
                         .setMessage("每天一个\n" +
                                 "每天一文\n" +
                                 "满足你的文艺阅读\n\n" +
-                                "联系我/反馈:354295878@qq.com\n" +
-                                "当前版本:1.0.0")
+                                "联系我/反馈：354295878@qq.com\n" +
+                                "当前版本："+ PackageUtil.getVerionName(mContext))
                         .setCancelable(false)
                         .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                             @Override
