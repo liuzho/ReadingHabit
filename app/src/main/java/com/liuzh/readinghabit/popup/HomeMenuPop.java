@@ -17,7 +17,7 @@ import com.liuzh.readinghabit.dialog.CollectDialog;
 import com.liuzh.readinghabit.fragment.BaseFragment;
 import com.liuzh.readinghabit.fragment.OneFragment;
 import com.liuzh.readinghabit.fragment.ReadFragment;
-import com.liuzh.readinghabit.task.DeleteLikeFromDB;
+import com.liuzh.readinghabit.task.DeleteLikeInDB;
 import com.liuzh.readinghabit.task.InsertOne2DB;
 import com.liuzh.readinghabit.task.InsertRead2DB;
 import com.liuzh.readinghabit.task.IsLike;
@@ -32,7 +32,7 @@ import com.liuzh.readinghabit.util.PackageUtil;
 public class HomeMenuPop extends PopupWindow {
 
     private static final String TAG = "HomeMenuPop";
-    private ImageView mBtLike;
+    public ImageView mBtLike;
     private ImageView mBtPre;
     private ImageView mBtNext;
     private ImageView mBtToday;
@@ -141,7 +141,7 @@ public class HomeMenuPop extends PopupWindow {
                 ReadData readData = ((ReadFragment) fragment).getCurrBean();
                 if ((fragment).isLiked()) {
                     // 已收藏，从数据库删除
-                    new DeleteLikeFromDB(fragment, mBtLike, LikeDBHelper.READ_TABLE_NAME)
+                    new DeleteLikeInDB(fragment, mBtLike, LikeDBHelper.READ_TABLE_NAME)
                             .execute(readData.date.curr);
                 } else {
                     // 未收藏，向数据库添加
@@ -163,7 +163,7 @@ public class HomeMenuPop extends PopupWindow {
                 OneDay oneDay = ((OneFragment) fragment).getCurrBean();
                 if (fragment.isLiked()) {
                     // 已收藏，从数据库删除
-                    new DeleteLikeFromDB(fragment, mBtLike, LikeDBHelper.ONE_TABLE_NAME)
+                    new DeleteLikeInDB(fragment, mBtLike, LikeDBHelper.ONE_TABLE_NAME)
                             .execute(oneDay.curr);
                 } else {
                     // 未收藏，向数据库添加

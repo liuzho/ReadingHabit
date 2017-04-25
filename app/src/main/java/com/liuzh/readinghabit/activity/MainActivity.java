@@ -21,11 +21,13 @@ import com.liuzh.readinghabit.R;
 import com.liuzh.readinghabit.bean.Update;
 import com.liuzh.readinghabit.bean.one.OneDay;
 import com.liuzh.readinghabit.bean.read.ReadData;
+import com.liuzh.readinghabit.db.LikeDBHelper;
 import com.liuzh.readinghabit.dialog.CollectDialog;
 import com.liuzh.readinghabit.fragment.BaseFragment;
 import com.liuzh.readinghabit.fragment.OneFragment;
 import com.liuzh.readinghabit.fragment.ReadFragment;
 import com.liuzh.readinghabit.popup.HomeMenuPop;
+import com.liuzh.readinghabit.task.DeleteLikeInDB;
 import com.liuzh.readinghabit.util.PackageUtil;
 import com.liuzh.readinghabit.util.RetrofitUtil;
 
@@ -86,14 +88,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Update> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.getMessage());
+                Log.i(TAG, "获取更新失败: " + t.getMessage());
             }
         });
     }
 
     private void showUpdateDialog(int v, Update update) {
         int sv = Integer.valueOf(update.versionCode);
-
         if (sv > v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("新版本提示")
@@ -132,6 +133,21 @@ public class MainActivity extends AppCompatActivity {
                 mVpMain.setCurrentItem(1, true);
                 mFragmentList.get(1).setLikeBean(read);
             }
+
+            @Override
+            public void onReadDelete(ReadData read) {
+                ReadData currBean = (ReadData) mFragmentList.get(1).getCurrBean();
+                BaseFragment fragment = null;
+                ImageView btLike = null;
+                if (read.date.curr.equals(currBean.date.curr)) {
+                    fragment = mFragmentList.get(1);
+                    if (mVpMain.getCurrentItem() == 1) {
+                        btLike = mMenuPop.mBtLike;
+                    }
+                }
+                new DeleteLikeInDB(fragment, btLike, LikeDBHelper.READ_TABLE_NAME)
+                        .execute(read.date.curr);
+            }
         });
         mLikesDialog.setOnOneClickListener(new CollectDialog.OnOneClickListener() {
             @Override
@@ -139,6 +155,21 @@ public class MainActivity extends AppCompatActivity {
                 mLikesDialog.dismiss();
                 mVpMain.setCurrentItem(0, true);
                 mFragmentList.get(0).setLikeBean(one);
+            }
+
+            @Override
+            public void onOneDelete(OneDay one) {
+                OneDay currBean = (OneDay) mFragmentList.get(0).getCurrBean();
+                BaseFragment fragment = null;
+                ImageView btLike = null;
+                if (one.curr.equals(currBean.curr)) {
+                    fragment = mFragmentList.get(0);
+                    if (mVpMain.getCurrentItem() == 0) {
+                        btLike = mMenuPop.mBtLike;
+                    }
+                }
+                new DeleteLikeInDB(fragment, btLike, LikeDBHelper.ONE_TABLE_NAME)
+                        .execute(one.curr);
             }
         });
     }

@@ -25,6 +25,9 @@ public class QueryLikes extends AsyncTask<Void, Void, Void> {
 
     private CollectDialog mDialog;
 
+    private boolean mReadNoMsg;
+    private boolean mOneNoMsg;
+
     public QueryLikes(CollectDialog dialog) {
         mDialog = dialog;
     }
@@ -41,6 +44,7 @@ public class QueryLikes extends AsyncTask<Void, Void, Void> {
         Cursor readCursor = db.query(LikeDBHelper.READ_TABLE_NAME,
                 null, null, null, null, null, null);
         if (readCursor.moveToFirst()) {
+            mReadNoMsg = false;
             do {
                 ReadData read = new ReadData();
                 read.title = dbGetString(readCursor, LikeDBHelper.TITLE);
@@ -51,11 +55,14 @@ public class QueryLikes extends AsyncTask<Void, Void, Void> {
                 read.date.next = dbGetString(readCursor, LikeDBHelper.NEXT);
                 mReadList.add(read);
             } while (readCursor.moveToNext());
+        } else {
+            mReadNoMsg = true;
         }
         readCursor.close();
         Cursor oneCursor = db.query(LikeDBHelper.ONE_TABLE_NAME,
                 null, null, null, null, null, null);
         if (oneCursor.moveToFirst()) {
+            mOneNoMsg = false;
             do {
                 OneDay one = new OneDay();
                 one.hp_author = dbGetString(oneCursor, LikeDBHelper.HP_AUTHOR);
@@ -69,6 +76,8 @@ public class QueryLikes extends AsyncTask<Void, Void, Void> {
                 one.next = dbGetString(oneCursor, LikeDBHelper.NEXT);
                 mOneList.add(one);
             } while (oneCursor.moveToNext());
+        }else{
+            mOneNoMsg = true;
         }
         oneCursor.close();
         return null;
@@ -77,8 +86,10 @@ public class QueryLikes extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        mDialog.setData(mOneList,mReadList);
+        mDialog.setData(mOneList, mReadList);
         mDialog.showProgress(false);
+        mDialog.readNoMsg(mReadNoMsg);
+        mDialog.oneNoMsg(mOneNoMsg);
     }
 
 

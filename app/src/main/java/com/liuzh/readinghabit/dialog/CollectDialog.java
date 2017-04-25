@@ -28,6 +28,9 @@ public class CollectDialog extends Dialog {
     private RecyclerView mRvOne;
     private RecyclerView mRvRead;
 
+    private TextView mTvOneNoMsg;
+    private TextView mTvReadNoMsg;
+
     private ProgressBar mProgressBar;
 
     private List<OneDay> mOneList = new ArrayList<>();
@@ -56,6 +59,10 @@ public class CollectDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_collect);
+
+        mTvOneNoMsg = (TextView) findViewById(R.id.tv_oneNoMsg);
+        mTvReadNoMsg = (TextView) findViewById(R.id.tv_readNoMsg);
+
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRvOne = (RecyclerView) findViewById(R.id.rv_one);
         mRvRead = (RecyclerView) findViewById(R.id.rv_read);
@@ -80,6 +87,17 @@ public class CollectDialog extends Dialog {
                     @Override
                     public void onClick(View v) {
                         mOneListener.onOneCLick(mOneList.get(holder.getLayoutPosition()));
+                    }
+                });
+                holder.itemView.findViewById(R.id.tv_delete).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOneListener.onOneDelete(mOneList.get(holder.getLayoutPosition()));
+                        mOneList.remove(holder.getLayoutPosition());
+                        mOneAdapter.notifyDataSetChanged();
+                        if (mOneList.size() == 0){
+                            oneNoMsg(true);
+                        }
                     }
                 });
             }
@@ -111,6 +129,17 @@ public class CollectDialog extends Dialog {
                         mReadListener.onReadClick(mReadList.get(holder.getLayoutPosition()));
                     }
                 });
+                holder.itemView.findViewById(R.id.tv_delete).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mReadListener.onReadDelete(mReadList.get(holder.getLayoutPosition()));
+                        mReadList.remove(holder.getLayoutPosition());
+                        mReadAdapter.notifyDataSetChanged();
+                        if (mReadList.size() == 0){
+                            readNoMsg(true);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -132,6 +161,8 @@ public class CollectDialog extends Dialog {
 
     public interface OnReadClickListener {
         void onReadClick(ReadData read);
+
+        void onReadDelete(ReadData read);
     }
 
     public void setOnReadClickListener(OnReadClickListener listener) {
@@ -141,10 +172,32 @@ public class CollectDialog extends Dialog {
 
     public interface OnOneClickListener {
         void onOneCLick(OneDay one);
+
+        void onOneDelete(OneDay one);
     }
 
     public void setOnOneClickListener(OnOneClickListener listener) {
         mOneListener = listener;
+    }
+
+    public void oneNoMsg(boolean isNoMsg) {
+        if (isNoMsg) {
+            mRvOne.setVisibility(View.GONE);
+            mTvOneNoMsg.setVisibility(View.VISIBLE);
+        } else {
+            mTvOneNoMsg.setVisibility(View.GONE);
+            mRvOne.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void readNoMsg(boolean isNoMsg) {
+        if (isNoMsg) {
+            mRvRead.setVisibility(View.GONE);
+            mTvReadNoMsg.setVisibility(View.VISIBLE);
+        } else {
+            mRvRead.setVisibility(View.VISIBLE);
+            mTvReadNoMsg.setVisibility(View.GONE);
+        }
     }
 
 }

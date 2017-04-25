@@ -13,13 +13,13 @@ import com.liuzh.readinghabit.fragment.BaseFragment;
  * Created by 刘晓彬 on 2017/4/22.
  */
 
-public class DeleteLikeFromDB extends AsyncTask<String, Void, Void> {
+public class DeleteLikeInDB extends AsyncTask<String, Void, Void> {
 
     private String mTableName;
     private BaseFragment mFragment;
     private ImageView mBtLike;
 
-    public DeleteLikeFromDB(BaseFragment fragment, ImageView btLike, String tableName) {
+    public DeleteLikeInDB(BaseFragment fragment, ImageView btLike, String tableName) {
         mFragment = fragment;
         mBtLike = btLike;
         mTableName = tableName;
@@ -36,8 +36,12 @@ public class DeleteLikeFromDB extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        mFragment.setIsLiked(false);
-        mBtLike.setImageResource(R.drawable.like);
+        if (mFragment != null) {
+            mFragment.setIsLiked(false);
+        }
+        if (mBtLike != null) {
+            mBtLike.setImageResource(R.drawable.like);
+        }
         App.showToast("取消收藏");
     }
 }

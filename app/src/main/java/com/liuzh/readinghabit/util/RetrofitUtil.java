@@ -21,7 +21,7 @@ public class RetrofitUtil {
 
     private static final String BASE_URL_READ = "https://interface.meiriyiwen.com/";
 
-    private static final String BASE_URL_UPDATE = "https://microzz.cn/";
+    private static final String BASE_URL_UPDATE = "https://liuzho.com/readinghabitapp/";
 
     /**
      * 获取Retrofit实例
