@@ -12,6 +12,8 @@ import com.liuzh.readinghabit.bean.read.ReadData;
 import com.liuzh.readinghabit.util.DateUtil;
 import com.liuzh.readinghabit.util.RetrofitUtil;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +36,9 @@ public class ReadFragment extends BaseFragment {
 
     private Call<Read> mCall;
 
+    // 第一天没有数据的时间戳
+    private long mNoDataMills = System.currentTimeMillis();
+
     private boolean mIsFirstEnter = true;
 
     @Override
@@ -47,6 +52,7 @@ public class ReadFragment extends BaseFragment {
     }
 
     private void fetchRead(String date) {
+
         if (mFetchListener != null) {
             mFetchListener.onBeginFetch();
         }
@@ -54,6 +60,22 @@ public class ReadFragment extends BaseFragment {
         mCall.enqueue(new Callback<Read>() {
             @Override
             public void onResponse(Call<Read> call, Response<Read> response) {
+                if (response.body() == null) {
+                    StringBuilder errorMsgSb = new StringBuilder("get read content error ： ");
+                    if (response.errorBody() == null) {
+                        errorMsgSb.append("unknown error");
+                    } else {
+                        try {
+                            errorMsgSb.append(response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            errorMsgSb.append("get error body msg error => ")
+                                    .append(e.getMessage());
+                        }
+                    }
+                    App.showToast(errorMsgSb.toString());
+                    return;
+                }
                 mData = response.body().data;
                 setData();
                 if (mFetchListener != null) {
@@ -103,12 +125,21 @@ public class ReadFragment extends BaseFragment {
 
     @Override
     public void pre() {
-        fetchRead(mData.date.prev);
+        String date;
+        if (mData == null) {
+            date = DateUtil.getLastDay(mNoDataMills);
+        } else {
+            date = mData.date.prev;
+        }
+        fetchRead(date);
     }
 
     @Override
     public void next() {
-        if (mData.date.curr.equals(DateUtil.getReadYMD())) {
+        if (mData == null || mData.date == null) {
+            return;
+        }
+        if (mData.date.next.equals(DateUtil.getReadYMD(mNoDataMills))) {
             App.showToast("no next");
             return;
         }

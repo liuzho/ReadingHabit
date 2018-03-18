@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.MessageQueue;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,7 +40,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MessageQueue
 
 
     private static final String TAG = "MainActivity";
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("新版本提示")
                     .setMessage(update.info
-                            + "\n\n当前版本：" + PackageUtil.getVerionName(mContext)
+                            + "\n\n当前版本：" + PackageUtil.getVersionName(mContext)
                             + "\n发布版本：" + update.versionName
                             + "\n发布日期：" + update.publishDate)
                     .setPositiveButton("愉快升级", new DialogInterface.OnClickListener() {
@@ -241,14 +238,12 @@ public class MainActivity extends AppCompatActivity {
         oneFragment.setOnFetchListener(new BaseFragment.OnFetchListener() {
             @Override
             public void onBeginFetch() {
-                Log.i(TAG, "OneFragment onBeginFetch: ");
                 mMenuPop.btClickable(false);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFetched() {
-                Log.i(TAG, "OneFragment onFetched: ");
                 mMenuPop.btClickable(true);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }

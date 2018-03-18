@@ -7,7 +7,9 @@ package com.liuzh.readinghabit.bean.read;
 public class ReadData {
     public String author;
     public String title;
+    public String digest;
     public String content;
+    public int c;
 
     public Date date = new Date();
 }

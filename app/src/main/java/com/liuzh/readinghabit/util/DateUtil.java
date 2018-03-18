@@ -1,9 +1,8 @@
 package com.liuzh.readinghabit.util;
 
-import android.annotation.SuppressLint;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 日期的工具类
@@ -11,44 +10,57 @@ import java.util.Date;
  */
 
 public class DateUtil {
+
+
+    public static final long ONE_DAY = 1000 * 60 * 60 * 24;
+
     /**
      * 获取格式化后的年月日
      *
      * @return 格式化后的年月日
      */
     public static String getOneYMD() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         return sdf.format(new Date());
     }
 
 
     public static String getReadYMD() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        return sdf.format(new Date());
+        return getReadYMD(System.currentTimeMillis());
+    }
+
+    public static String getReadYMD(long mills) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.US);
+        return sdf.format(new Date(mills));
     }
 
     public static String getDay() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd", Locale.US);
         return sdf.format(new Date());
     }
 
     public static String getMouth() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM", Locale.US);
         return sdf.format(new Date());
     }
 
+    public static String getTodayLastDay() {
+        return getLastDay(System.currentTimeMillis());
+    }
+
+    public static String getLastDay(long mills) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.US);
+        return sdf.format(new Date(mills - ONE_DAY));
+    }
+
     public static String getYear() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.US);
         return sdf.format(new Date());
     }
 
     /**
      * 是不是闰年
+     *
      * @param year 年份
      * @return true：是；false：否
      */

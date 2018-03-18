@@ -72,7 +72,7 @@ public class HomeMenuPop extends PopupWindow {
                                 "每天一文\n" +
                                 "满足你的文艺阅读\n\n" +
                                 "联系我/反馈：354295878@qq.com\n" +
-                                "当前版本："+ PackageUtil.getVerionName(mContext))
+                                "当前版本："+ PackageUtil.getVersionName(mContext))
                         .setCancelable(false)
                         .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                             @Override

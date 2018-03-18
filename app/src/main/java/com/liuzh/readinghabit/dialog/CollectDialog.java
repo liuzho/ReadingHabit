@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,7 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 刘晓彬 on 2017/4/22.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/22.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 
 public class CollectDialog extends Dialog {
@@ -60,12 +65,14 @@ public class CollectDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_collect);
 
-        mTvOneNoMsg = (TextView) findViewById(R.id.tv_oneNoMsg);
-        mTvReadNoMsg = (TextView) findViewById(R.id.tv_readNoMsg);
+        initWindow();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mRvOne = (RecyclerView) findViewById(R.id.rv_one);
-        mRvRead = (RecyclerView) findViewById(R.id.rv_read);
+        mTvOneNoMsg = findViewById(R.id.tv_oneNoMsg);
+        mTvReadNoMsg = findViewById(R.id.tv_readNoMsg);
+
+        mProgressBar =  findViewById(R.id.progressBar);
+        mRvOne = findViewById(R.id.rv_one);
+        mRvRead =  findViewById(R.id.rv_read);
 
         mRvOne.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvRead.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -81,7 +88,7 @@ public class CollectDialog extends Dialog {
 
             @Override
             public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-                TextView tv = (TextView) holder.itemView.findViewById(R.id.tv_title);
+                TextView tv = holder.itemView.findViewById(R.id.tv_title);
                 tv.setText(mOneList.get(position).hp_content);
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -95,7 +102,7 @@ public class CollectDialog extends Dialog {
                         mOneListener.onOneDelete(mOneList.get(holder.getLayoutPosition()));
                         mOneList.remove(holder.getLayoutPosition());
                         mOneAdapter.notifyDataSetChanged();
-                        if (mOneList.size() == 0){
+                        if (mOneList.size() == 0) {
                             oneNoMsg(true);
                         }
                     }
@@ -121,7 +128,7 @@ public class CollectDialog extends Dialog {
 
             @Override
             public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-                TextView tv = (TextView) holder.itemView.findViewById(R.id.tv_title);
+                TextView tv = holder.itemView.findViewById(R.id.tv_title);
                 tv.setText(mReadList.get(position).title);
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -135,7 +142,7 @@ public class CollectDialog extends Dialog {
                         mReadListener.onReadDelete(mReadList.get(holder.getLayoutPosition()));
                         mReadList.remove(holder.getLayoutPosition());
                         mReadAdapter.notifyDataSetChanged();
-                        if (mReadList.size() == 0){
+                        if (mReadList.size() == 0) {
                             readNoMsg(true);
                         }
                     }
@@ -150,6 +157,18 @@ public class CollectDialog extends Dialog {
         mRvRead.setAdapter(mReadAdapter);
 
     }
+
+    private void initWindow() {
+        Window window = getWindow();
+        if (window == null) {
+            return;
+        }
+
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(attributes);
+    }
+
 
     public void showProgress(boolean needShow) {
         if (needShow) {

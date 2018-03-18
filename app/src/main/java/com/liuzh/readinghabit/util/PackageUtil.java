@@ -18,7 +18,7 @@ public class PackageUtil {
         return 0;
     }
 
-    public static String getVerionName(Context context){
+    public static String getVersionName(Context context){
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
