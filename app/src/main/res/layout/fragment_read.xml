@@ -33,7 +33,7 @@
             tools:text="刘宇" />
 
 
-        <me.biubiubiu.justifytext.library.JustifyTextView
+        <TextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -20,9 +20,25 @@ public class InsertOne2DB extends AsyncTask<OneDay, Void, Void> {
     private ImageView mBtLike;
     private BaseFragment mFragment;
 
-    public InsertOne2DB(BaseFragment fragment,ImageView btLike) {
+    private TaskListener mListener;
+
+
+    public InsertOne2DB(BaseFragment fragment, ImageView btLike) {
         mFragment = fragment;
         mBtLike = btLike;
+    }
+
+    public void setListener(TaskListener listener) {
+        mListener = listener;
+    }
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (mListener != null) {
+            mListener.onPost();
+        }
     }
 
     @Override
@@ -45,11 +61,16 @@ public class InsertOne2DB extends AsyncTask<OneDay, Void, Void> {
         return null;
     }
 
+
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        mBtLike.setImageResource(R.drawable.like_);
+        if (mListener != null) {
+            mListener.onPost();
+        }
+        mBtLike.setImageResource(R.drawable.ic_popup_menu_like_liked);
         mFragment.setIsLiked(true);
         App.showToast("收藏成功");
     }
+
 }

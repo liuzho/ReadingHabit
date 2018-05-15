@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 
 import com.liuzh.readinghabit.application.App;
 
-import java.util.List;
-
 
 /**
- * Created by 刘晓彬 on 2017/4/18.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/18.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 public abstract class BaseFragment extends Fragment {
 

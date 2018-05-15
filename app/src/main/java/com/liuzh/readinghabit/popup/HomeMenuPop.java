@@ -26,18 +26,20 @@ import com.liuzh.readinghabit.util.DensityUtil;
 import com.liuzh.readinghabit.util.PackageUtil;
 
 /**
- * Created by 刘晓彬 on 2017/4/18.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/18.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 
 public class HomeMenuPop extends PopupWindow {
 
-    private static final String TAG = "HomeMenuPop";
-    public ImageView mBtLike;
-    private ImageView mBtPre;
-    private ImageView mBtNext;
-    private ImageView mBtToday;
-    private ImageView mBtAbout;
-    private ImageView mBtCollect;
+    public ImageView mIvLike;
+    private ImageView mIvPre;
+    private ImageView mIvNext;
+    private ImageView mIvToday;
+    private ImageView mIvAbout;
+    private ImageView mIvCollect;
 
     private Context mContext;
     private CollectDialog mDialog;
@@ -54,16 +56,16 @@ public class HomeMenuPop extends PopupWindow {
 
     private void findView() {
         View content = getContentView();
-        mBtLike = (ImageView) content.findViewById(R.id.like);
-        mBtPre = (ImageView) content.findViewById(R.id.pre);
-        mBtNext = (ImageView) content.findViewById(R.id.next);
-        mBtToday = (ImageView) content.findViewById(R.id.today);
-        mBtAbout = (ImageView) content.findViewById(R.id.about);
-        mBtCollect = (ImageView) content.findViewById(R.id.collect);
+        mIvLike = content.findViewById(R.id.iv_like_popup_menu);
+        mIvPre = content.findViewById(R.id.iv_pre_popup_menu);
+        mIvNext = content.findViewById(R.id.iv_next_popup_menu);
+        mIvToday = content.findViewById(R.id.iv_today_popup_menu);
+        mIvAbout = content.findViewById(R.id.iv_about_popup_menu);
+        mIvCollect = content.findViewById(R.id.iv_collect_popup_menu);
     }
 
     private void initView() {
-        mBtAbout.setOnClickListener(new View.OnClickListener() {
+        mIvAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(mContext)
@@ -72,7 +74,7 @@ public class HomeMenuPop extends PopupWindow {
                                 "每天一文\n" +
                                 "满足你的文艺阅读\n\n" +
                                 "联系我/反馈：354295878@qq.com\n" +
-                                "当前版本："+ PackageUtil.getVersionName(mContext))
+                                "当前版本：" + PackageUtil.getVersionName(mContext))
                         .setCancelable(false)
                         .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                             @Override
@@ -83,7 +85,7 @@ public class HomeMenuPop extends PopupWindow {
                         .show();
             }
         });
-        mBtCollect.setOnClickListener(new View.OnClickListener() {
+        mIvCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDialog.show();
@@ -101,22 +103,22 @@ public class HomeMenuPop extends PopupWindow {
      */
     public HomeMenuPop setCurrContent(final BaseFragment fragment) {
 
-        mBtPre.setOnClickListener(new View.OnClickListener() {
+        mIvPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (fragment).pre();
+                fragment.pre();
             }
         });
-        mBtNext.setOnClickListener(new View.OnClickListener() {
+        mIvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (fragment).next();
+                fragment.next();
             }
         });
-        mBtToday.setOnClickListener(new View.OnClickListener() {
+        mIvToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (fragment).curr();
+                fragment.curr();
             }
         });
         // ReadFragment、OneFragment不同处理
@@ -135,17 +137,17 @@ public class HomeMenuPop extends PopupWindow {
      * @param fragment readFragment
      */
     private void setReadClick(final BaseFragment fragment) {
-        mBtLike.setOnClickListener(new View.OnClickListener() {
+        mIvLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ReadData readData = ((ReadFragment) fragment).getCurrBean();
-                if ((fragment).isLiked()) {
+                if (fragment.isLiked()) {
                     // 已收藏，从数据库删除
-                    new DeleteLikeInDB(fragment, mBtLike, LikeDBHelper.READ_TABLE_NAME)
+                    new DeleteLikeInDB(fragment, mIvLike, LikeDBHelper.READ_TABLE_NAME)
                             .execute(readData.date.curr);
                 } else {
                     // 未收藏，向数据库添加
-                    new InsertRead2DB(fragment, mBtLike).execute(readData);
+                    new InsertRead2DB(fragment, mIvLike).execute(readData);
                 }
             }
         });
@@ -157,17 +159,17 @@ public class HomeMenuPop extends PopupWindow {
      * @param fragment oneFragment
      */
     private void setOneClick(final BaseFragment fragment) {
-        mBtLike.setOnClickListener(new View.OnClickListener() {
+        mIvLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OneDay oneDay = ((OneFragment) fragment).getCurrBean();
                 if (fragment.isLiked()) {
                     // 已收藏，从数据库删除
-                    new DeleteLikeInDB(fragment, mBtLike, LikeDBHelper.ONE_TABLE_NAME)
+                    new DeleteLikeInDB(fragment, mIvLike, LikeDBHelper.ONE_TABLE_NAME)
                             .execute(oneDay.curr);
                 } else {
                     // 未收藏，向数据库添加
-                    new InsertOne2DB(fragment, mBtLike).execute(oneDay);
+                    new InsertOne2DB(fragment, mIvLike).execute(oneDay);
                 }
             }
         });
@@ -183,7 +185,7 @@ public class HomeMenuPop extends PopupWindow {
         if (readData == null) {
             return;
         }
-        new IsLike(fragment, mBtLike, LikeDBHelper.READ_TABLE_NAME).execute(readData.date.curr);
+        new IsLike(fragment, mIvLike, LikeDBHelper.READ_TABLE_NAME).execute(readData.date.curr);
     }
 
     /**
@@ -196,14 +198,14 @@ public class HomeMenuPop extends PopupWindow {
         if (oneDay == null) {
             return;
         }
-        new IsLike(fragment, mBtLike, LikeDBHelper.ONE_TABLE_NAME).execute(oneDay.curr);
+        new IsLike(fragment, mIvLike, LikeDBHelper.ONE_TABLE_NAME).execute(oneDay.curr);
     }
 
     public void btClickable(boolean clickable) {
-        mBtPre.setClickable(clickable);
-        mBtToday.setClickable(clickable);
-        mBtNext.setClickable(clickable);
-        mBtLike.setClickable(clickable);
+        mIvPre.setClickable(clickable);
+        mIvToday.setClickable(clickable);
+        mIvNext.setClickable(clickable);
+        mIvLike.setClickable(clickable);
     }
 
 }

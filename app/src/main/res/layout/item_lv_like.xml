@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.liuzh.readinghabit.view.LeftMoveLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="50dp">
 
-
-    <com.liuzh.readinghabit.view.LeftMoveLayout
+    <TextView
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/click_bg"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="#000"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/click_bg"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="#000"
-            android:textSize="16sp"
-            tools:text="心灵的支撑" />
-
-        <TextView
-            android:id="@+id/tv_delete"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:background="#F00"
-            android:gravity="center"
-            android:text="@string/remove"
-            android:textColor="#FFF"
-            android:textSize="16sp" />
-    </com.liuzh.readinghabit.view.LeftMoveLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:background="#AAA" />
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:background="#F00"
+        android:gravity="center"
+        android:text="@string/remove"
+        android:textColor="#FFF"
+        android:textSize="16sp" />
+</com.liuzh.readinghabit.view.LeftMoveLayout>

@@ -41,23 +41,22 @@
             android:textSize="12sp"
             tools:text="摄影 | JerryZ" />
 
-        <me.biubiubiu.justifytext.library.JustifyTextView
+        <TextView
             android:id="@+id/tv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="-8dp"
-            android:layout_marginRight="15dp"
-            android:lineSpacingExtra="5dp"
+            android:includeFontPadding="false"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textSize="16sp"
-            tools:text="\n食物总是会在相同的季节履行诺言一般地再现，而人不会\n" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            tools:text="食物总是会在相同的季节履行诺言一般地再现，而人不会" />
 
         <TextView
             android:id="@+id/tv_textInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="-20dp"
             android:textColor="#aaa"
             android:textSize="12sp"
             tools:text="贾行家《尘土》" />

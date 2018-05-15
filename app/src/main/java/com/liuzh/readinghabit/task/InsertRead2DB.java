@@ -3,7 +3,6 @@ package com.liuzh.readinghabit.task;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.liuzh.readinghabit.R;
@@ -55,7 +54,7 @@ public class InsertRead2DB extends AsyncTask<ReadData, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        mBtLike.setImageResource(R.drawable.like_);
+        mBtLike.setImageResource(R.drawable.ic_popup_menu_like_liked);
         mFragment.setIsLiked(true);
         App.showToast("收藏成功");
     }

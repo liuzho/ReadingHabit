@@ -87,9 +87,18 @@ public class OneFragment extends BaseFragment {
         mCall.enqueue(new Callback<One>() {
             @Override
             public void onResponse(Call<One> call, Response<One> response) {
-                mDataList = response.body().data;
-                // 填充curr、prev、next
-                feedDate(mDataList);
+                // 调用获取结束监听
+                if (mFetchListener != null) {
+                    mFetchListener.onFetched();
+                }
+                One one = response.body();
+                if (one == null) {
+                    App.showToast("get one error : no data");
+                    return;
+                }
+                mDataList = one.data;
+                // 填充curr、prev、ic_popup_menu_next
+                fillDate(mDataList);
                 if (mIsNextNewList) {
                     // 如果是按后一天获取到的数据，则将指示器定位到1号
                     mCurrentPos = mDataList.size() - 1;
@@ -113,10 +122,7 @@ public class OneFragment extends BaseFragment {
                     // 设置界面数据
                     setDate(mDataList.get(mCurrentPos));
                 }
-                // 调用获取结束监听
-                if (mFetchListener != null) {
-                    mFetchListener.onFetched();
-                }
+
             }
 
             @Override
@@ -135,8 +141,8 @@ public class OneFragment extends BaseFragment {
      *
      * @param data 第一次获取到的数据
      */
-    private void feedDate(List<OneDay> data) {
-        // maketime的格式：2017-04-20 22:26:23 故以此分割得到日期的数组
+    private void fillDate(List<OneDay> data) {
+        // make time的格式：2017-04-20 22:26:23 故以此分割得到日期的数组
         String[] dateStrArr = data.get(0).maketime.split(" ")[0].split(SEPARATOR);
         int year = Integer.valueOf(dateStrArr[0]);
         int mouth = Integer.valueOf(dateStrArr[1]);
@@ -147,12 +153,11 @@ public class OneFragment extends BaseFragment {
             // feedCurr
             oneDay.curr = year + SEPARATOR + add0(mouth) + SEPARATOR + add0(day);
             // feedPrev
-            feedPrev(oneDay, year, mouth, day);
+            fillPrev(oneDay, year, mouth, day);
             // feedNext
-            feedNext(oneDay, year, mouth, day);
+            fillNext(oneDay, year, mouth, day);
 
             day--;
-//            Log.i(TAG, oneDay.prev + "<==>" + oneDay.curr + "<==>" + oneDay.next);
         }
     }
 
@@ -181,7 +186,7 @@ public class OneFragment extends BaseFragment {
      * @param mouth  月份
      * @param day    号
      */
-    private void feedNext(OneDay oneDay, int year, int mouth, int day) {
+    private void fillNext(OneDay oneDay, int year, int mouth, int day) {
         if (day >= 28) {
             switch (mouth) {
                 case 1:
@@ -239,7 +244,7 @@ public class OneFragment extends BaseFragment {
      * @param mouth  月份
      * @param day    号
      */
-    private void feedPrev(OneDay oneDay, int year, int mouth, int day) {
+    private void fillPrev(OneDay oneDay, int year, int mouth, int day) {
         if (day == 1 && mouth == 1) {
             // 1月1号
             year = year - 1;
@@ -265,7 +270,7 @@ public class OneFragment extends BaseFragment {
         Log.i(TAG, "setDate: ONE===>" + date.curr);
         Picasso.with(getActivity())
                 .load(date.hp_img_url)
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.ic_one_img_placeholder)
                 .into(mIvImg);
         String picInfo;
         if (TextUtils.isEmpty(date.image_authors)) {
@@ -289,11 +294,11 @@ public class OneFragment extends BaseFragment {
 
     @Override
     protected void initView(View rootView) {
-        mIvImg = (ImageView) rootView.findViewById(R.id.iv_img);
-        mTvPicInfo = (TextView) rootView.findViewById(R.id.tv_picInfo);
-        mTvTextInfo = (TextView) rootView.findViewById(R.id.tv_textInfo);
-        mTvText = (TextView) rootView.findViewById(R.id.tv_text);
-        mScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
+        mIvImg = rootView.findViewById(R.id.iv_img);
+        mTvPicInfo = rootView.findViewById(R.id.tv_picInfo);
+        mTvTextInfo = rootView.findViewById(R.id.tv_textInfo);
+        mTvText = rootView.findViewById(R.id.tv_text);
+        mScrollView = rootView.findViewById(R.id.scrollView);
     }
 
     @Override
@@ -308,7 +313,6 @@ public class OneFragment extends BaseFragment {
         if (mCurrentPos == -1) {
             return;
         } else if (mCurrentPos == mDataList.size() - 1) {
-            Log.i(TAG, "pre: new pre list");
             fetchOne(mDataList.get(mCurrentPos).prev);
             return;
         }
@@ -322,7 +326,6 @@ public class OneFragment extends BaseFragment {
      */
     @Override
     public void next() {
-        Log.i(TAG, "next: " + mDataList.get(mCurrentPos).next);
 
         if (mCurrentPos == -1) {
             return;
@@ -364,7 +367,6 @@ public class OneFragment extends BaseFragment {
             mCurrentPos = 0;
             setDate(mDataList.get(mCurrentPos));
         } else {
-            Log.i(TAG, "curr: fetch");
             fetchOne(currDate);
         }
     }
@@ -383,7 +385,6 @@ public class OneFragment extends BaseFragment {
         OneDay one = (OneDay) o;
         fetchOne(one.curr);
         setDate(one);
-        Log.i(TAG, "setLikeBean: " + one.curr);
     }
 
 

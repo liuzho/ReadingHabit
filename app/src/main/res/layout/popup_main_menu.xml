@@ -1,74 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    app:cardBackgroundColor="#EE111111"
-    app:cardCornerRadius="0dp">
+    android:background="#EE111111"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+    <ImageView
+        android:id="@+id/iv_today_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/menuMargin"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:src="@drawable/ic_popup_menu_today" />
 
-        <ImageView
-            android:id="@+id/like"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/menuMargin"
-            android:layout_marginRight="@dimen/menuMargin"
-            android:src="@drawable/like" />
+    <ImageView
+        android:id="@+id/iv_pre_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/menuMargin"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:layout_toLeftOf="@+id/iv_today_popup_menu"
+        android:src="@drawable/ic_popup_menu_pre" />
 
-        <ImageView
-            android:id="@+id/pre"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/menuMargin"
-            android:layout_marginRight="@dimen/menuMargin"
-            android:src="@drawable/pre" />
 
-        <ImageView
-            android:id="@+id/today"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/menuMargin"
-            android:layout_marginRight="@dimen/menuMargin"
-            android:src="@drawable/today" />
+    <ImageView
+        android:id="@+id/iv_like_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/menuMargin"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:layout_toLeftOf="@+id/iv_pre_popup_menu"
+        android:src="@drawable/ic_popup_menu_like_nor" />
 
-        <ImageView
-            android:id="@+id/next"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/menuMargin"
-            android:layout_marginRight="@dimen/menuMargin"
-            android:src="@drawable/next" />
 
-        <ImageView
-            android:id="@+id/collect"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/menuMargin"
-            android:layout_marginRight="@dimen/menuMargin"
-            android:src="@drawable/collect" />
+    <ImageView
+        android:id="@+id/iv_next_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/menuMargin"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:layout_toRightOf="@+id/iv_today_popup_menu"
+        android:src="@drawable/ic_popup_menu_next" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+    <ImageView
+        android:id="@+id/iv_collect_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/menuMargin"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:layout_toRightOf="@+id/iv_next_popup_menu"
+        android:src="@drawable/ic_popup_menu_collect" />
 
-            <ImageView
-                android:id="@+id/about"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/about" />
-        </RelativeLayout>
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    <ImageView
+        android:id="@+id/iv_about_popup_menu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/menuMargin"
+        android:src="@drawable/ic_popup_menu_about" />
+
+</RelativeLayout>

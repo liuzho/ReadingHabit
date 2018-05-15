@@ -5,7 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by 刘晓彬 on 2017/4/21.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/21.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 
 public class LikeDBHelper extends SQLiteOpenHelper {

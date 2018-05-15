@@ -27,7 +27,7 @@
             android:layout_height="40dp"
             android:clickable="true"
             android:background="#88EFEFEF"
-            android:src="@drawable/menu" />
+            android:src="@drawable/ic_popup_menu_float_btn" />
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

@@ -5,7 +5,10 @@ import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Created by 刘晓彬 on 2017/4/18.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/18.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 
 public class App extends Application {
@@ -32,5 +35,6 @@ public class App extends Application {
             mToast.setText(msg);
         }
         mToast.show();
+
     }
 }

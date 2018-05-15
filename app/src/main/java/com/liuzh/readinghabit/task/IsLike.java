@@ -59,9 +59,9 @@ public class IsLike extends AsyncTask<String, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         if (aBoolean) {
-            mBtLike.setImageResource(R.drawable.like_);
+            mBtLike.setImageResource(R.drawable.ic_popup_menu_like_liked);
         } else {
-            mBtLike.setImageResource(R.drawable.like);
+            mBtLike.setImageResource(R.drawable.ic_popup_menu_like_nor);
         }
         mFragment.setIsLiked(aBoolean);
     }

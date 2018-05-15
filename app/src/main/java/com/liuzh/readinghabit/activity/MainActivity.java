@@ -38,8 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = "MainActivity";
@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private HomeMenuPop mMenuPop;
 
     private ProgressBar mProgressBar;
-
-    private ImageView mIvShowMenu;
 
     private CollectDialog mLikesDialog;
 
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 if (read.date.curr.equals(currBean.date.curr)) {
                     fragment = mFragmentList.get(1);
                     if (mVpMain.getCurrentItem() == 1) {
-                        btLike = mMenuPop.mBtLike;
+                        btLike = mMenuPop.mIvLike;
                     }
                 }
                 new DeleteLikeInDB(fragment, btLike, LikeDBHelper.READ_TABLE_NAME)
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 if (one.curr.equals(currBean.curr)) {
                     fragment = mFragmentList.get(0);
                     if (mVpMain.getCurrentItem() == 0) {
-                        btLike = mMenuPop.mBtLike;
+                        btLike = mMenuPop.mIvLike;
                     }
                 }
                 new DeleteLikeInDB(fragment, btLike, LikeDBHelper.ONE_TABLE_NAME)
@@ -177,11 +175,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = findViewById(R.id.progressBar);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        mVpMain = (ViewPager) findViewById(R.id.vp_main);
+        mVpMain = findViewById(R.id.vp_main);
+        mVpMain.setOffscreenPageLimit(0);
         mVpMain.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -217,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mIvShowMenu = (ImageView) findViewById(R.id.bt_showMenu);
-
-        mIvShowMenu.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bt_showMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMenuPop.setCurrContent(mFragmentList.get(mPagePos))
@@ -285,8 +282,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mMenuPop.isShowing()) {
             mMenuPop.dismiss();
-        } else {
-            finish();
+            return;
         }
+        super.onBackPressed();
+
     }
 }

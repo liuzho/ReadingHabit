@@ -12,14 +12,15 @@ import com.liuzh.readinghabit.bean.read.ReadData;
 import com.liuzh.readinghabit.util.DateUtil;
 import com.liuzh.readinghabit.util.RetrofitUtil;
 
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by 刘晓彬 on 2017/4/18.
+ * @author Created by 刘晓彬.
+ * @date on 2017/4/18.
+ * <p>
+ * 没有写不出来的bug,只有不努力的码农
  */
 
 public class ReadFragment extends BaseFragment {
@@ -33,11 +34,6 @@ public class ReadFragment extends BaseFragment {
     private ReadData mData;
 
     private ScrollView mScrollView;
-
-    private Call<Read> mCall;
-
-    // 第一天没有数据的时间戳
-    private long mNoDataMills = System.currentTimeMillis();
 
     private boolean mIsFirstEnter = true;
 
@@ -56,41 +52,31 @@ public class ReadFragment extends BaseFragment {
         if (mFetchListener != null) {
             mFetchListener.onBeginFetch();
         }
-        mCall = RetrofitUtil.getReadCall(date);
-        mCall.enqueue(new Callback<Read>() {
-            @Override
-            public void onResponse(Call<Read> call, Response<Read> response) {
-                if (response.body() == null) {
-                    StringBuilder errorMsgSb = new StringBuilder("get read content error ： ");
-                    if (response.errorBody() == null) {
-                        errorMsgSb.append("unknown error");
-                    } else {
-                        try {
-                            errorMsgSb.append(response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            errorMsgSb.append("get error body msg error => ")
-                                    .append(e.getMessage());
+        RetrofitUtil.getReadCall(date)
+                .enqueue(new Callback<Read>() {
+                    @Override
+                    public void onResponse(Call<Read> call, Response<Read> response) {
+                        if (mFetchListener != null) {
+                            mFetchListener.onFetched();
                         }
+                        Read read = response.body();
+                        if (read == null) {
+                            App.showToast("get read error : no data");
+                            return;
+                        }
+                        mData = read.data;
+                        setData();
                     }
-                    App.showToast(errorMsgSb.toString());
-                    return;
-                }
-                mData = response.body().data;
-                setData();
-                if (mFetchListener != null) {
-                    mFetchListener.onFetched();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Read> call, Throwable t) {
-                if (mFetchListener != null) {
-                    mFetchListener.onFetched();
-                }
-                onFetchFailure(t, "获取文章失败");
-            }
-        });
+
+                    @Override
+                    public void onFailure(Call<Read> call, Throwable t) {
+                        if (mFetchListener != null) {
+                            mFetchListener.onFetched();
+                        }
+                        onFetchFailure(t, "获取文章失败");
+                    }
+                });
     }
 
     private void setData() {
@@ -103,7 +89,7 @@ public class ReadFragment extends BaseFragment {
         // 将界面滑动到顶部
         mScrollView.scrollTo(0, 0);
         mScrollView.smoothScrollTo(0, 0);
-        // 如果是刚刚启动应用进来，则不进行收藏检验，因为One也在检验就会导致收藏按钮图片异常
+        // 如果是刚刚启动应用进来预加载的本页，则不进行收藏检验，因为One也在检验就会导致收藏按钮图片异常
         if (mIsFirstEnter) {
             mIsFirstEnter = false;
             return;
@@ -113,10 +99,10 @@ public class ReadFragment extends BaseFragment {
 
     @Override
     protected void initView(View rootView) {
-        mTvTitle = (TextView) rootView.findViewById(R.id.tv_title);
-        mTvAuthor = (TextView) rootView.findViewById(R.id.tv_author);
-        mTvContent = (TextView) rootView.findViewById(R.id.tv_content);
-        mScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
+        mTvTitle = rootView.findViewById(R.id.tv_title);
+        mTvAuthor = rootView.findViewById(R.id.tv_author);
+        mTvContent = rootView.findViewById(R.id.tv_content);
+        mScrollView = rootView.findViewById(R.id.scrollView);
     }
 
     @Override
@@ -125,24 +111,20 @@ public class ReadFragment extends BaseFragment {
 
     @Override
     public void pre() {
-        String date;
-        if (mData == null) {
-            date = DateUtil.getLastDay(mNoDataMills);
-        } else {
-            date = mData.date.prev;
+        if (mData == null || mData.date == null) {
+            App.showToast("no data");
+            return;
         }
-        fetchRead(date);
+        fetchRead(mData.date.prev);
     }
 
     @Override
     public void next() {
         if (mData == null || mData.date == null) {
+            App.showToast("no data");
             return;
         }
-        if (mData.date.next.equals(DateUtil.getReadYMD(mNoDataMills))) {
-            App.showToast("no next");
-            return;
-        }
+
         fetchRead(mData.date.next);
     }
 
@@ -150,7 +132,7 @@ public class ReadFragment extends BaseFragment {
     public void curr() {
         String currDate = DateUtil.getReadYMD();
         if (mData.date.curr.equals(currDate)) {
-            App.showToast("is today");
+            App.showToast("is ic_popup_menu_today");
             return;
         }
         fetchRead(currDate);

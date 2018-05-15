@@ -40,7 +40,7 @@ public class DeleteLikeInDB extends AsyncTask<String, Void, Void> {
             mFragment.setIsLiked(false);
         }
         if (mBtLike != null) {
-            mBtLike.setImageResource(R.drawable.like);
+            mBtLike.setImageResource(R.drawable.ic_popup_menu_like_nor);
         }
         App.showToast("取消收藏");
     }
